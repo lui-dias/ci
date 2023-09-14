@@ -2,7 +2,7 @@ import { parse } from 'https://deno.land/std@0.201.0/flags/mod.ts'
 import * as c from 'https://deno.land/std@0.201.0/fmt/colors.ts'
 import Kia from 'https://deno.land/x/kia@0.4.1/mod.ts'
 import { google } from 'npm:googleapis'
-import { isCI } from "https://deno.land/x/is/ci.ts"
+import { isCI } from "https://deno.land/x/is@v0.6.0/ci.ts"
 
 const debug = Deno.env.get('DEBUG') === '1'
 
