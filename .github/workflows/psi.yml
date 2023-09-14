@@ -4,7 +4,7 @@ on: push
 
 env:
     REPO_NAME: ${{ github.event.repository.name }}
-    GIT_HASH: $(git rev-parse --short "$GITHUB_SHA")
+    GIT_HASH: ${{ github.sha }}
 
 jobs:
   build:
@@ -16,4 +16,4 @@ jobs:
           deno-version: v1.x
       
       - run: echo ${GIT_HASH}
-      - run: deno run -A psi.ts https://deco-sites-${REPO_NAME}.deno.dev/ -c 5
+      - run: deno run -A psi.ts https://deco-sites-${REPO_NAME}.deno.dev/ -c 5 --hash ${GIT_HASH}

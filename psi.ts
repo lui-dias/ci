@@ -2,7 +2,7 @@ import { parse } from 'https://deno.land/std@0.201.0/flags/mod.ts'
 import * as c from 'https://deno.land/std@0.201.0/fmt/colors.ts'
 import Kia from 'https://deno.land/x/kia@0.4.1/mod.ts'
 import { google } from 'npm:googleapis'
-import { isCI } from "https://deno.land/x/is@v0.6.0/ci.ts"
+import isCI from "npm:is-ci"
 
 const debug = Deno.env.get('DEBUG') === '1'
 
@@ -28,6 +28,7 @@ const parsedArgs = parse<{
 	_: string[]
 	c?: number
 	d?: string
+    hash?: string
 }>(Deno.args)
 
 if (!parsedArgs._.length) {
@@ -57,6 +58,7 @@ if (!parsedArgs._.length) {
 const urls = parsedArgs._
 const count = parsedArgs.c || 5
 const device = parsedArgs.d || 'mobile'
+const hash = parsedArgs.hash
 
 const results = {} as Record<string, string>
 
@@ -199,8 +201,10 @@ for (const url of urls) {
 }
 
 
-if (await isCI()) {
+if (isCI) {
     let t = ''
+
+    t += `Commit hash: ${hash}`
 
     for (const [url, result] of Object.entries(results)) {
         t += `URL: ${url}\n${result}\n`
