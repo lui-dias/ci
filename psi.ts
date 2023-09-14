@@ -1,10 +1,8 @@
 import { parse } from 'https://deno.land/std@0.201.0/flags/mod.ts'
 import * as c from 'https://deno.land/std@0.201.0/fmt/colors.ts'
-import { DOMParser, Element } from 'https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts'
 import Kia from 'https://deno.land/x/kia@0.4.1/mod.ts'
 import { google } from 'npm:googleapis'
-import { Semaphore } from 'https://deno.land/x/async@v2.0.2/semaphore.ts'
-
+import { isCI } from "https://deno.land/x/is/ci.ts"
 
 const debug = Deno.env.get('DEBUG') === '1'
 
@@ -200,11 +198,23 @@ for (const url of urls) {
 	await main(url)
 }
 
-console.log()
 
-for (const [url, result] of Object.entries(results)) {
-	console.log(`URL: ${url}\n${result}`)
+if (await isCI()) {
+    let t = ''
+
+    for (const [url, result] of Object.entries(results)) {
+        t += `URL: ${url}\n${result}\n`
+    }
+    t += `Total duration: ${formatTime(totalDuration)}\n`
+
+    await Deno.writeFile('psi.txt', new TextEncoder().encode(t))
+} else {
+    console.log()
+    
+    for (const [url, result] of Object.entries(results)) {
+        console.log(`URL: ${url}\n${result}`)
+    }
+    console.log(`Total duration: ${formatTime(totalDuration)}`)
+    
+    console.log()
 }
-console.log(`Total duration: ${formatTime(totalDuration)}`)
-
-console.log()

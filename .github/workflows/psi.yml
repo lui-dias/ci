@@ -13,4 +13,5 @@ jobs:
       - uses: denoland/setup-deno@v1.1.1
         with:
           deno-version: v1.x
+      
       - run: deno run -A psi.ts https://deco-sites-${REPO_NAME}.deno.dev/ -c 5
