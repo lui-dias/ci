@@ -2,6 +2,9 @@ name: PSI
 
 on: push
 
+env:
+    REPO_NAME: ${{ github.event.repository.name }}
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -10,4 +13,4 @@ jobs:
       - uses: denoland/setup-deno@v1.1.1
         with:
           deno-version: v1.x
-      - run: deno run -A psi.ts https://github.com/deco-sites/zorba -c 5
+      - run: deno run -A psi.ts https://deco-sites-${REPO_NAME}.deno.dev/ -c 5

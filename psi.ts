@@ -5,16 +5,6 @@ import Kia from 'https://deno.land/x/kia@0.4.1/mod.ts'
 import { google } from 'npm:googleapis'
 import { Semaphore } from 'https://deno.land/x/async@v2.0.2/semaphore.ts'
 
-/*
-
-Access site pages, run this:
-
-
-[...document.querySelectorAll('tbody > a > div:nth-child(2)')].map(
-    (i) => i.innerText
-).join(', ')
-
-*/
 
 const debug = Deno.env.get('DEBUG') === '1'
 
@@ -70,71 +60,6 @@ const urls = parsedArgs._
 const count = parsedArgs.c || 5
 const device = parsedArgs.d || 'mobile'
 
-if (urls[0] === 'index') {
-	const seedUrl = urls[1]
-
-	const urlParsed = new URL(seedUrl)
-	const hostname = urlParsed.hostname
-	const protocol = urlParsed.protocol
-	const port = urlParsed.port
-
-	const urlsToIndex = [seedUrl] as string[]
-	const indexedUrls = new Set() as Set<string>
-
-	const parser = new DOMParser()
-
-	while (true) {
-		if (urlsToIndex.length === 0) {
-			break
-		}
-
-		const url = urlsToIndex.shift()!
-
-		if (indexedUrls.has(url)) {
-			continue
-		}
-
-		const text = await fetch(url).then((res) => res.text())
-		const dom = parser.parseFromString(text, 'text/html')
-
-		for (const a of dom?.querySelectorAll('a')!) {
-			let href = (a as Element).getAttribute('href')
-
-			if (!href || href.startsWith('#') || /^https?/.test(href) || href === '/') {
-				continue
-			}
-
-			if (/^\/./.test(href)) {
-				href = `${protocol}//${hostname}:${port}${href}`
-			} else if (/^\w/.test(href)) {
-				href = `${url.replace(/\/$/, '')}/${href}`
-			}
-
-			urlsToIndex.push(href)
-			indexedUrls.add(href)
-		}
-
-		break
-	}
-
-	const sem = new Semaphore(10)
-
-	await Promise.all(
-		[...new Set(indexedUrls).values()].map((url) =>
-			sem.lock(async () => {
-				const isDown = await fetch(url, { method: 'HEAD' }).then((res) => !res.ok)
-
-				if (isDown) {
-					indexedUrls.delete(url)
-				}
-			})
-		),
-	)
-
-	console.log(indexedUrls)
-	Deno.exit(0)
-}
-
 const results = {} as Record<string, string>
 
 const { pagespeedapi } = google.pagespeedonline('v5')
@@ -170,18 +95,14 @@ async function main(url: string) {
 			let a: unknown
 
 			while (true) {
-				try {
-					a = await pagespeedapi.runpagespeed({
-						category: i === 0
-							? ['accessibility', 'best-practices', 'performance', 'pwa', 'seo']
-							: ['performance'],
-						strategy: device,
-						url,
-					})
-					break
-				} catch {
-					await sleep(10 * 1000)
-				}
+                a = await pagespeedapi.runpagespeed({
+                    category: i === 0
+                        ? ['accessibility', 'best-practices', 'performance', 'pwa', 'seo']
+                        : ['performance'],
+                    strategy: device,
+                    url,
+                })
+                break	
 			}
 
 			const end = performance.now() - start
