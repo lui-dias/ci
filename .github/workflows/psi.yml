@@ -15,5 +15,10 @@ jobs:
         with:
           deno-version: v1.x
       
-      - run: echo ${GIT_HASH}
       - run: deno run -A psi.ts https://deco-sites-zorba.deno.dev/ -c 5 --hash ${GIT_HASH}
+      - run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "generated"
+            git push
