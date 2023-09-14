@@ -1,0 +1,13 @@
+name: PSI
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1.1.1
+        with:
+          deno-version: v1.x
+      - run: deno run -A psi.ts https://github.com/deco-sites/zorba -c 5
