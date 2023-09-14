@@ -67,6 +67,8 @@ const { pagespeedapi } = google.pagespeedonline('v5')
 let totalDuration = 0
 
 async function main(url: string) {
+    console.log(url)
+
 	const performances = [] as number[]
 	const accessibilities = [] as number[]
 	const bestPractices = [] as number[]
