@@ -1,8 +1,8 @@
-Commit hash: d993192e7d08f015deb04e6c55b8921a979d9d70
-Performance:    73  86  97
+Commit hash: 60fa7d1ea5d039f809ba6aa25f733e788d628828
+Performance:    94  96  97
 Accessibility:  96                                                                                                             
 Best Practices: 100                                                                                                               
 PWA:            88                                                                                                                        
 SEO:            92                                                                                                                        
 
-Total duration: 00:04:28
+Total duration: 00:03:51
