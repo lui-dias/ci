@@ -217,7 +217,7 @@ if (isCI) {
 
   if (await fileExists('psi.txt')) {
     t = await Deno.readTextFile("psi.txt");
-    t += '\n\n'
+    t += '\n\n' 
   }
 
   t += `Commit hash: ${hash}\n`;
