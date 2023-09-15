@@ -1,9 +1,0 @@
-Commit hash: 8a246b5791a59eb5357bb8cd06f64efac59fce67
-URL: https://deco-sites-zorba.deno.dev/
-Performance:    97  98  98
-Accessibility:  96                                                                                                             
-Best Practices: 100                                                                                                               
-PWA:            88                                                                                                                        
-SEO:            92                                                                                                                        
-
-Total duration: 00:05:05
