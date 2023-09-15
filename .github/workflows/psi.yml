@@ -19,7 +19,8 @@ jobs:
       - run: |
             git config user.name github-actions
             git config user.email github-actions@github.com
-            git pull
+            git fetch --all
+            git reset --hard origin/main
             git add .
             git commit -m "generated"
             git push
